@@ -43,7 +43,7 @@ const MOCK_COURSES = [
             title_ar: 'مقدمة للدورة: علاش بايثون في 2026؟',
             title_fr: 'Pourquoi Python en 2026?',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            content_url: 'https://www.youtube.com/watch?v=kqtD5dpn9C8',
             content_text: '### أهلاً بك في الدورة!\n\nفي هذا الدرس سنتعرف على قوة لغة بايثون في معالجة البيانات، وكيف أصبحت اللغة الأولى لتطوير تطبيقات الذكاء الاصطناعي.\n\n- مميزات بايثون للشركات التونسية والعمل عن بعد\n- مجالات التطبيق (Web, Automation, AI)\n- كيف تستفيد من هذه الدورة المجانية',
             duration_minutes: 8,
             sort_order: 1
@@ -53,7 +53,7 @@ const MOCK_COURSES = [
             title_ar: 'تثبيت الأدوات وكتابة أول كود Hello World',
             title_fr: 'Installation & Premier Script',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+            content_url: 'https://www.youtube.com/watch?v=mvZHDpCHphk',
             content_text: '### إعداد بيئة التطوير\n\nسنقوم بتثبيت بيئة بايثون و VS Code، ثم نكتب أول برنامج لنا بلغة بايثون.\n\n```python\nprint("مرحبا بكم في منصة درس!")\n```',
             duration_minutes: 12,
             sort_order: 2
@@ -105,12 +105,12 @@ const MOCK_COURSES = [
     id: 'c_cf_web',
     creator_id: 'u_sami',
     creator_name: 'سامي بن نصر',
-    title_ar: 'تطوير تطبيقات الويب الحديثة مجاناً مع Cloudflare',
-    title_fr: 'Développement Web Fullstack avec Cloudflare',
-    title_en: 'Modern Fullstack Web Development on Cloudflare Zero-Cost Stack',
-    description_ar: 'تعلم بناء تطبيقات ويب سريعة وحديثة باستعمال React, Hono, D1 و R2 دون دفع مليم واحد في الاستضافة.',
-    description_fr: 'Guide complet pour architecturer et déployer des applications web performantes à 0$ de coût d hébergement.',
-    description_en: 'Complete roadmap to building serverless apps with React, Vite, Hono, and Cloudflare Pages/D1 at $0 cost.',
+    title_ar: 'تطوير تطبيقات الويب الحديثة والشاملة (Full-Stack)',
+    title_fr: 'Développement Web Fullstack Moderne',
+    title_en: 'Modern Fullstack Web Development',
+    description_ar: 'تعلم بناء تطبيقات ويب تفاعلية متكاملة من الصفر باستعمال React و Node.js وقواعد البيانات مع نشرها على الويب مجاناً.',
+    description_fr: 'Guide complet pour architecturer et déployer des applications web performantes et modernes.',
+    description_en: 'Complete roadmap to building fullstack web apps with modern frontend and backend tools.',
     thumbnail_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
     category: 'web_dev',
     difficulty: 'intermediate',
@@ -122,17 +122,17 @@ const MOCK_COURSES = [
     modules: [
       {
         id: 'm_cf_1',
-        title_ar: 'الوحدة 1: مقدمة في بنية Cloudflare Serverless',
-        title_fr: 'Module 1: Introduction Serverless Cloudflare',
+        title_ar: 'الوحدة 1: أساسيات وهيكلة تطبيقات الويب الحديثة',
+        title_fr: 'Module 1: Architecture Web Moderne',
         sort_order: 1,
         lessons: [
           {
             id: 'l_cf_1_1',
-            title_ar: 'لماذا Cloudflare Pages و Workers؟',
-            title_fr: 'Pourquoi Cloudflare Pages et Workers?',
+            title_ar: 'كيف تبني وتطلق تطبيق ويب بسرعة فائقة؟',
+            title_fr: 'Comment déployer une application ultra-rapide?',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-            content_text: '### استضافة كاملة بصفر دولار\n\nنظرة عامة على Cloudflare Pages, Workers, D1 (SQLite), R2 (Storage).\nكيف تبني تطبيقاً يتحمل ملايين الزيارات مجاناً.',
+            content_url: 'https://www.youtube.com/watch?v=nu_pCVPKzTk',
+            content_text: '### البنية الحديثة لتطبيقات الويب\n\nنظرة عامة على تصميم وبناء واجهات أمامية وخلفية سريعة وخفيفة على شبكة الإنترنت.\nكيف تبني تطبيقاً متكاملاً يتحمل آلاف الزيارات بدون بطء.',
             duration_minutes: 14,
             sort_order: 1
           }
@@ -147,7 +147,7 @@ const MOCK_COURSES = [
     title_ar: 'مراجعة البكالوريا: ملخصات وتمارين الرياضيات التفاعلية',
     title_fr: 'Bac Tunisie: Révision Mathématiques & Exercices',
     title_en: 'Tunisian Baccalaureate: Mathematics Crash Course',
-    description_ar: 'ملخصات ذكية ومحلولة بالفيديو لأهم محاور الرياضيات لشعب العلوم التجريبية والرياضيات والتقنية مع نصائح الامتحانات.',
+    description_ar: 'ملخصات ذكية ومحلولة بالفيديو لأهم محاور الرياضيات لشعب العلوم التجريبية والرياضيات والتقنية مع نصائح حل الامتحانات الوطنية.',
     description_fr: 'Fiches synthétiques et vidéos explicatives pour réussir l épreuve de mathématiques au Baccalauréat tunisien.',
     description_en: 'Concise interactive revision modules and past-paper video breakdowns for Tunisian Bac students.',
     thumbnail_url: 'https://images.unsplash.com/photo-1635070041078-e363dbe005cb?auto=format&fit=crop&w=800&q=80',
@@ -170,7 +170,7 @@ const MOCK_COURSES = [
             title_ar: 'دراسة الدوال والمسائل النموذجية للباكالوريا',
             title_fr: 'Étude de fonctions et problèmes types',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            content_url: 'https://www.youtube.com/watch?v=0e3GPea1Tyg',
             content_text: '### تذكير بالقواعد الأساسية\n\n- حساب النهايات (Limites)\n- الاشتقاق وجدول التغيرات\n- الرسم البياني ونقاط الانعطاف',
             duration_minutes: 20,
             sort_order: 1
@@ -280,9 +280,10 @@ app.post('/courses', async (c) => {
         lessons: [
           {
             id: `l_${Date.now()}`,
-            title_ar: 'الدرس الأول',
-            title_fr: 'Première leçon',
-            type: 'text',
+            title_ar: body.title_ar || 'الدرس الأول',
+            title_fr: body.title_fr || 'Première leçon',
+            type: body.video_url ? 'video' : 'text',
+            content_url: body.video_url || undefined,
             content_text: body.initial_content || '# مرحباً بكم في الدورة\n\nمحتوى تم إنشاؤه عبر استوديو درس.',
             duration_minutes: 10,
             sort_order: 1

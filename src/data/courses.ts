@@ -31,7 +31,7 @@ export const INITIAL_COURSES: Course[] = [
             title_ar: 'مقدمة للدورة: علاش بايثون في 2026؟',
             title_fr: 'Pourquoi Python en 2026?',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4',
+            content_url: 'https://www.youtube.com/watch?v=kqtD5dpn9C8',
             content_text: '### أهلاً بك في الدورة!\n\nفي هذا الدرس سنتعرف على قوة لغة بايثون في معالجة البيانات، وكيف أصبحت اللغة الأولى لتطوير تطبيقات الذكاء الاصطناعي.\n\n- مميزات بايثون للشركات التونسية والعمل عن بعد\n- مجالات التطبيق (Web, Automation, AI)\n- كيف تستفيد من هذه الدورة المجانية',
             duration_minutes: 8,
             sort_order: 1
@@ -41,7 +41,7 @@ export const INITIAL_COURSES: Course[] = [
             title_ar: 'تثبيت الأدوات وكتابة أول كود Hello World',
             title_fr: 'Installation & Premier Script',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ElephantsDream.mp4',
+            content_url: 'https://www.youtube.com/watch?v=mvZHDpCHphk',
             content_text: '### إعداد بيئة التطوير\n\nسنقوم بتثبيت بيئة بايثون و VS Code، ثم نكتب أول برنامج لنا بلغة بايثون.\n\n```python\nprint("مرحبا بكم في منصة درس!")\n```',
             duration_minutes: 12,
             sort_order: 2
@@ -93,12 +93,12 @@ export const INITIAL_COURSES: Course[] = [
     id: 'c_cf_web',
     creator_id: 'u_sami',
     creator_name: 'سامي بن نصر',
-    title_ar: 'تطوير تطبيقات الويب الحديثة والـ Fullstack',
+    title_ar: 'تطوير تطبيقات الويب الحديثة والشاملة (Full-Stack)',
     title_fr: 'Développement Web Fullstack Moderne',
     title_en: 'Modern Fullstack Web Development',
-    description_ar: 'تعلم بناء تطبيقات ويب سريعة وحديثة باستعمال React و TypeScript و Hono مع قواعد بيانات سحابية وتطوير واجهات متجاوبة وخفيفة.',
+    description_ar: 'تعلم بناء تطبيقات ويب تفاعلية متكاملة من الصفر باستعمال React و Node.js وقواعد البيانات مع نشرها على الويب مجاناً.',
     description_fr: 'Guide complet pour architecturer et déployer des applications web performantes et modernes.',
-    description_en: 'Complete roadmap to building serverless apps with React, Vite, TypeScript, and modern edge databases.',
+    description_en: 'Complete roadmap to building fullstack web apps with modern frontend and backend tools.',
     thumbnail_url: 'https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80',
     category: 'web_dev',
     difficulty: 'intermediate',
@@ -110,8 +110,8 @@ export const INITIAL_COURSES: Course[] = [
     modules: [
       {
         id: 'm_cf_1',
-        title_ar: 'الوحدة 1: بنية التطبيقات الحديثة والـ Serverless',
-        title_fr: 'Module 1: Architecture Serverless Moderne',
+        title_ar: 'الوحدة 1: أساسيات وهيكلة تطبيقات الويب الحديثة',
+        title_fr: 'Module 1: Architecture Web Moderne',
         sort_order: 1,
         lessons: [
           {
@@ -119,8 +119,8 @@ export const INITIAL_COURSES: Course[] = [
             title_ar: 'كيف تبني وتطلق تطبيق ويب بسرعة فائقة؟',
             title_fr: 'Comment déployer une application ultra-rapide?',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerBlazes.mp4',
-            content_text: '### البنية الحديثة لتطبيقات الويب\n\nنظرة عامة على تصميم وبناء واجهات أمامية سريعة وخفيفة على شبكة الإنترنت.\nكيف تبني تطبيقاً يتحمل آلاف الزيارات بدون بطء.',
+            content_url: 'https://www.youtube.com/watch?v=nu_pCVPKzTk',
+            content_text: '### البنية الحديثة لتطبيقات الويب\n\nنظرة عامة على تصميم وبناء واجهات أمامية وخلفية سريعة وخفيفة على شبكة الإنترنت.\nكيف تبني تطبيقاً متكاملاً يتحمل آلاف الزيارات بدون بطء.',
             duration_minutes: 14,
             sort_order: 1
           }
@@ -158,7 +158,7 @@ export const INITIAL_COURSES: Course[] = [
             title_ar: 'دراسة الدوال والمسائل النموذجية للباكالوريا',
             title_fr: 'Étude de fonctions et problèmes types',
             type: 'video',
-            content_url: 'https://commondatastorage.googleapis.com/gtv-videos-bucket/sample/ForBiggerEscapes.mp4',
+            content_url: 'https://www.youtube.com/watch?v=0e3GPea1Tyg',
             content_text: '### تذكير بالقواعد الأساسية\n\n- حساب النهايات (Limites)\n- الاشتقاق وجدول التغيرات\n- الرسم البياني ونقاط الانعطاف',
             duration_minutes: 20,
             sort_order: 1

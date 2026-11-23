@@ -14,6 +14,7 @@ import {
 import { Course, Lesson, QuizQuestion, User } from '../types';
 import { Language, translations } from '../lib/i18n';
 import { saveLessonOffline, isLessonOffline, removeLessonOffline } from '../lib/offline-db';
+import { getYouTubeEmbedUrl } from '../lib/youtube';
 
 interface LessonPlayerProps {
   course: Course;
@@ -136,25 +137,36 @@ export const LessonPlayer: React.FC<LessonPlayerProps> = ({
         {/* Left Column: Player & Lesson Content (3 cols) */}
         <div className="lg:col-span-3 space-y-6">
           {/* Video Player Box */}
-          {currentLesson.type === 'video' && (
-            <div className="bg-slate-900 rounded-card overflow-hidden shadow-lg aspect-video relative flex items-center justify-center">
-              {currentLesson.content_url ? (
-                <video
-                  controls
-                  className="w-full h-full object-contain"
-                  src={currentLesson.content_url}
-                  poster={course.thumbnail_url}
-                >
-                  متصفحك لا يدعم تشغيل الفيديو المباشر.
-                </video>
-              ) : (
-                <div className="text-white text-center p-6">
-                  <Video className="w-12 h-12 text-primary mx-auto mb-2 opacity-80" />
-                  <p className="text-sm font-medium">جاري معالجة الفيديو في R2...</p>
-                </div>
-              )}
-            </div>
-          )}
+          {currentLesson.type === 'video' && (() => {
+            const ytEmbedUrl = getYouTubeEmbedUrl(currentLesson.content_url);
+            return (
+              <div className="bg-slate-900 rounded-2xl overflow-hidden shadow-lg aspect-video relative flex items-center justify-center">
+                {ytEmbedUrl ? (
+                  <iframe
+                    src={ytEmbedUrl}
+                    title={lang === 'ar' ? currentLesson.title_ar : (currentLesson.title_fr || currentLesson.title_ar)}
+                    className="w-full h-full border-0"
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                    allowFullScreen
+                  />
+                ) : currentLesson.content_url ? (
+                  <video
+                    controls
+                    className="w-full h-full object-contain"
+                    src={currentLesson.content_url}
+                    poster={course.thumbnail_url}
+                  >
+                    متصفحك لا يدعم تشغيل الفيديو المباشر.
+                  </video>
+                ) : (
+                  <div className="text-white text-center p-6">
+                    <Video className="w-12 h-12 text-primary mx-auto mb-2 opacity-80" />
+                    <p className="text-sm font-medium font-arabic">جاري تجهيز محتوى الفيديو...</p>
+                  </div>
+                )}
+              </div>
+            );
+          })()}
 
           {/* Lesson Header */}
           <div className="bg-white rounded-card border border-neutral-border p-5">
