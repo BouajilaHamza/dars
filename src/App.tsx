@@ -9,7 +9,22 @@ import { AdminPanel } from './components/AdminPanel';
 import { AuthModal } from './components/AuthModal';
 import { Course, Lesson, User } from './types';
 import { Language, translations } from './lib/i18n';
-import { Sparkles, Globe, Heart, ShieldCheck, Zap, BookOpen } from 'lucide-react';
+import { INITIAL_COURSES } from './data/courses';
+import { 
+  Sparkles, 
+  Search, 
+  Play, 
+  BookOpen, 
+  Award, 
+  WifiOff, 
+  Clock, 
+  Users, 
+  CheckCircle2, 
+  GraduationCap, 
+  Compass,
+  ArrowRight,
+  ArrowLeft
+} from 'lucide-react';
 
 export const App: React.FC = () => {
   const [lang, setLang] = useState<Language>('ar');
@@ -20,10 +35,11 @@ export const App: React.FC = () => {
   const [authModalOpen, setAuthModalOpen] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState<string>('all');
   const [searchQuery, setSearchQuery] = useState('');
-  const [courses, setCourses] = useState<Course[]>([]);
+  
+  // Initialize synchronously with real data so there is ZERO skeleton delay!
+  const [courses, setCourses] = useState<Course[]>(INITIAL_COURSES);
   const [enrolledCourseIds, setEnrolledCourseIds] = useState<string[]>(['c_py_ai']);
   const [completedLessonIds, setCompletedLessonIds] = useState<string[]>(['l_py_1_1']);
-  const [loading, setLoading] = useState(true);
 
   const t = translations[lang];
 
@@ -33,10 +49,9 @@ export const App: React.FC = () => {
     document.documentElement.lang = lang;
   }, [lang]);
 
-  // Load courses from backend
+  // Sync background courses from server
   const fetchCourses = async () => {
     try {
-      setLoading(true);
       let url = '/api/courses';
       const params = new URLSearchParams();
       if (selectedCategory !== 'all') params.append('category', selectedCategory);
@@ -45,13 +60,11 @@ export const App: React.FC = () => {
 
       const res = await fetch(url);
       const data = (await res.json()) as any;
-      if (data.success && data.courses) {
+      if (data.success && data.courses && data.courses.length > 0) {
         setCourses(data.courses);
       }
     } catch (err) {
-      console.warn('API fetch fallback to cache/local', err);
-    } finally {
-      setLoading(false);
+      console.warn('API fetch fallback to local data', err);
     }
   };
 
@@ -109,16 +122,16 @@ export const App: React.FC = () => {
   };
 
   const categories = [
-    { id: 'all', label: t.allCategories },
-    { id: 'ai_data', label: t.aiAndData },
-    { id: 'web_dev', label: t.webDev },
-    { id: 'bac_prep', label: t.bacPrep },
-    { id: 'design', label: t.design },
-    { id: 'soft_skills', label: t.softSkills }
+    { id: 'all', label: t.allCategories, count: courses.length },
+    { id: 'ai_data', label: t.aiAndData, count: courses.filter(c => c.category === 'ai_data').length },
+    { id: 'web_dev', label: t.webDev, count: courses.filter(c => c.category === 'web_dev').length },
+    { id: 'bac_prep', label: t.bacPrep, count: courses.filter(c => c.category === 'bac_prep').length }
   ];
 
+  const featuredCourse = courses[0] || INITIAL_COURSES[0];
+
   return (
-    <div className="min-h-screen flex flex-col bg-neutral-bg font-sans selection:bg-sky-100 selection:text-sky-800">
+    <div className="min-h-screen flex flex-col bg-[#f8fafc] text-slate-900 font-sans selection:bg-sky-100 selection:text-sky-800">
       <Navbar
         lang={lang}
         onLanguageChange={setLang}
@@ -137,116 +150,273 @@ export const App: React.FC = () => {
         {/* VIEW 1: HOME CATALOG & HERO */}
         {view === 'home' && (
           <div>
-            {/* Hero Section */}
-            <section className="bg-gradient-to-b from-primary-surface/70 via-neutral-bg to-neutral-bg pt-12 pb-14 border-b border-neutral-border/50">
-              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-                {/* Community Pill */}
-                <div className="inline-flex items-center gap-2 bg-white px-3.5 py-1.5 rounded-full border border-neutral-border shadow-xs text-xs font-semibold text-neutral-text mb-6">
-                  <span className="w-2 h-2 rounded-full bg-accent-red animate-pulse" />
-                  <span>{t.communityCreated}</span>
-                  <span className="text-neutral-muted">|</span>
-                  <span className="text-primary">{t.heroStats.zeroCost}</span>
-                </div>
+            {/* HERO SECTION: Asymmetric Educational Hero */}
+            <section className="relative overflow-hidden bg-white border-b border-slate-200/80 pt-10 pb-16 lg:py-20">
+              {/* Subtle background glow */}
+              <div className="absolute top-0 end-0 w-96 h-96 bg-sky-100/50 rounded-full blur-3xl pointer-events-none -z-10" />
+              <div className="absolute bottom-0 start-0 w-80 h-80 bg-blue-50/60 rounded-full blur-2xl pointer-events-none -z-10" />
 
-                {/* Hero Title */}
-                <h1 className="text-3xl sm:text-5xl font-extrabold text-neutral-text font-arabic tracking-tight max-w-4xl mx-auto leading-tight sm:leading-snug">
-                  {lang === 'ar' ? (
-                    <>
-                      منصة التعلّم الحرة للمجتمع التونسي <br />
-                      <span className="text-primary">0 مليم تكلفة. جودة عالية للجميع.</span>
-                    </>
-                  ) : (
-                    <>
-                      {t.tagline} <br />
-                      <span className="text-primary">100% Gratuit. Pour tous les tunisiens.</span>
-                    </>
-                  )}
-                </h1>
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
+                  
+                  {/* Text Column (7 cols) */}
+                  <div className="lg:col-span-7 space-y-6 text-start">
+                    {/* Mission Tag */}
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-sky-50 border border-sky-100 text-sky-800 text-xs font-bold">
+                      <span className="w-2 h-2 rounded-full bg-accent-red animate-pulse" />
+                      <span>{lang === 'ar' ? 'مبادرة مجتمعية حرة تونسية' : 'Initiative libre pour la Tunisie'}</span>
+                      <span className="text-sky-300">•</span>
+                      <span>{lang === 'ar' ? '100% مجاني للجميع' : '100% Gratuit'}</span>
+                    </div>
 
-                {/* Subtitle */}
-                <p className="mt-4 text-sm sm:text-base text-neutral-muted max-w-2xl mx-auto leading-relaxed">
-                  {t.subtagline}
-                </p>
+                    {/* Main Headline */}
+                    <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold text-slate-900 leading-[1.2] tracking-tight">
+                      {lang === 'ar' ? (
+                        <>
+                          تعلّم البرمجة والذكاء الاصطناعي <br />
+                          <span className="text-sky-600">بالمجان وبجودة استثنائية.</span>
+                        </>
+                      ) : (
+                        <>
+                          L éducation libre et de qualité <br />
+                          <span className="text-sky-600">Accessible pour tous les tunisiens.</span>
+                        </>
+                      )}
+                    </h1>
 
-                {/* Hero Feature Pills */}
-                <div className="mt-8 flex flex-wrap items-center justify-center gap-4 text-xs font-medium text-neutral-text">
-                  <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-md border border-neutral-border">
-                    <Zap className="w-4 h-4 text-primary" />
-                    <span>{t.heroStats.edgeHosted}</span>
+                    {/* Subtitle */}
+                    <p className="text-base sm:text-lg text-slate-600 max-w-xl leading-relaxed">
+                      {lang === 'ar'
+                        ? 'منصة تعليمية مفتوحة المصدر بالدارجة والعربية تمنحك مهارات تقنية مطلوبة لسوق الشغل والعمل عن بعد دون أي رسوم.'
+                        : 'Cours pratiques en IA, développement logiciel et préparation aux examens, conçus pour propulser les compétences des jeunes tunisiens.'}
+                    </p>
+
+                    {/* Hero Search & Quick Keywords */}
+                    <div className="pt-2 max-w-lg">
+                      <div className="relative flex items-center">
+                        <Search className="w-4 h-4 absolute start-4 text-slate-400 pointer-events-none" />
+                        <input
+                          type="text"
+                          value={searchQuery}
+                          onChange={(e) => setSearchQuery(e.target.value)}
+                          placeholder={lang === 'ar' ? 'ماذا تريد أن تتعلم اليوم؟ (بايثون، ذكاء اصطناعي، ويب...)' : 'Que souhaitez-vous apprendre ?'}
+                          className="w-full bg-slate-50 hover:bg-slate-100/80 focus:bg-white border border-slate-200 focus:border-sky-600 text-sm rounded-xl py-3.5 pe-4 ps-11 outline-hidden shadow-xs transition-all"
+                        />
+                      </div>
+
+                      {/* Keyword tags */}
+                      <div className="flex flex-wrap items-center gap-2 mt-3 text-xs text-slate-500">
+                        <span className="font-semibold text-slate-400">{lang === 'ar' ? 'شائع:' : 'Populaire:'}</span>
+                        {['بايثون', 'ذكاء اصطناعي', 'تطوير ويب', 'رياضيات باك'].map((tag) => (
+                          <button
+                            key={tag}
+                            onClick={() => setSearchQuery(tag)}
+                            className="bg-slate-100 hover:bg-sky-50 hover:text-sky-700 px-2.5 py-1 rounded-md transition-colors"
+                          >
+                            #{tag}
+                          </button>
+                        ))}
+                      </div>
+                    </div>
+
+                    {/* Stat Badges Row */}
+                    <div className="pt-4 flex items-center gap-8 border-t border-slate-100 text-xs sm:text-sm text-slate-600">
+                      <div>
+                        <span className="text-xl sm:text-2xl font-bold text-slate-900 block font-arabic">+540</span>
+                        <span className="text-slate-500 text-xs">{lang === 'ar' ? 'متعلم نشط' : 'Apprenants'}</span>
+                      </div>
+                      <div className="w-px h-8 bg-slate-200" />
+                      <div>
+                        <span className="text-xl sm:text-2xl font-bold text-sky-600 block font-arabic">0 مليم</span>
+                        <span className="text-slate-500 text-xs">{lang === 'ar' ? 'تكلفة الوصول' : 'Sans abonnement'}</span>
+                      </div>
+                      <div className="w-px h-8 bg-slate-200" />
+                      <div>
+                        <span className="text-xl sm:text-2xl font-bold text-emerald-600 block font-arabic">100%</span>
+                        <span className="text-slate-500 text-xs">{lang === 'ar' ? 'محتوى حر ومفتوح' : 'Libre d accès'}</span>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-md border border-neutral-border">
-                    <ShieldCheck className="w-4 h-4 text-state-success" />
-                    <span>{t.heroStats.openCommunity}</span>
+
+                  {/* Featured Spotlight Card Column (5 cols) */}
+                  <div className="lg:col-span-5">
+                    <div className="relative mx-auto max-w-md">
+                      {/* Decorative backdrop layer */}
+                      <div className="absolute -inset-1.5 bg-gradient-to-r from-sky-500 to-blue-600 rounded-3xl blur-sm opacity-20 -z-10" />
+
+                      <div className="bg-white rounded-2xl border border-slate-200/90 shadow-xl p-5 space-y-4">
+                        <div className="flex items-center justify-between">
+                          <span className="text-[11px] font-bold text-sky-700 bg-sky-50 px-2.5 py-1 rounded-md flex items-center gap-1.5">
+                            <Sparkles className="w-3.5 h-3.5 text-sky-600" />
+                            <span>{lang === 'ar' ? 'دورة الأسبوع المختارة' : 'Cours en vedette'}</span>
+                          </span>
+                          <span className="text-[11px] font-bold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md">
+                            {lang === 'ar' ? 'متاح بالكامل' : 'Accès libre'}
+                          </span>
+                        </div>
+
+                        {/* Thumbnail with overlay Play button */}
+                        <div 
+                          onClick={() => handleSelectCourse(featuredCourse)}
+                          className="relative aspect-video rounded-xl overflow-hidden cursor-pointer group bg-slate-900"
+                        >
+                          <img 
+                            src={featuredCourse.thumbnail_url} 
+                            alt={featuredCourse.title_ar}
+                            className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105 opacity-90 group-hover:opacity-100"
+                          />
+                          <div className="absolute inset-0 bg-slate-950/40 flex items-center justify-center">
+                            <div className="w-12 h-12 rounded-full bg-white text-sky-600 flex items-center justify-center shadow-lg group-hover:scale-110 transition-transform">
+                              <Play className="w-5 h-5 fill-current ms-0.5" />
+                            </div>
+                          </div>
+                          <span className="absolute bottom-2.5 start-2.5 bg-slate-900/90 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                            {featuredCourse.estimated_hours} {t.hours} • فيديو عالي الجودة
+                          </span>
+                        </div>
+
+                        {/* Title & Preview info */}
+                        <div>
+                          <h3 
+                            onClick={() => handleSelectCourse(featuredCourse)}
+                            className="font-bold text-slate-900 text-base hover:text-sky-600 cursor-pointer transition-colors"
+                          >
+                            {lang === 'ar' ? featuredCourse.title_ar : featuredCourse.title_fr}
+                          </h3>
+                          <p className="text-xs text-slate-500 mt-1 line-clamp-2">
+                            {lang === 'ar' ? featuredCourse.description_ar : featuredCourse.description_fr}
+                          </p>
+                        </div>
+
+                        {/* Quick Action */}
+                        <button
+                          onClick={() => handleSelectCourse(featuredCourse)}
+                          className="w-full py-2.5 bg-sky-600 hover:bg-sky-700 text-white text-xs sm:text-sm font-bold rounded-xl transition-colors shadow-sm flex items-center justify-center gap-2"
+                        >
+                          <BookOpen className="w-4 h-4" />
+                          <span>{lang === 'ar' ? 'ابدأ الدورة الآن مجاناً' : 'Commencer le cours gratuitement'}</span>
+                        </button>
+                      </div>
+                    </div>
                   </div>
-                  <div className="flex items-center gap-1.5 bg-white px-3 py-1.5 rounded-md border border-neutral-border">
-                    <Sparkles className="w-4 h-4 text-sky-500" />
-                    <span>{t.aiGeneratedLabel}</span>
-                  </div>
+
                 </div>
               </div>
             </section>
 
-            {/* Courses Catalog Section */}
-            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-10">
-              {/* Category Filter Pills */}
-              <div className="flex items-center gap-2 overflow-x-auto pb-4 mb-8 scrollbar-none">
-                {categories.map((cat) => (
-                  <button
-                    key={cat.id}
-                    onClick={() => setSelectedCategory(cat.id)}
-                    className={`whitespace-nowrap px-4 py-2 rounded-btn text-xs sm:text-sm font-semibold transition-all ${
-                      selectedCategory === cat.id
-                        ? 'bg-primary text-white shadow-xs'
-                        : 'bg-white border border-neutral-border text-neutral-muted hover:border-primary/40 hover:text-neutral-text'
-                    }`}
-                  >
-                    {cat.label}
-                  </button>
-                ))}
+            {/* CATALOG SECTION */}
+            <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 mb-8">
+                <div>
+                  <h2 className="text-xl sm:text-2xl font-bold text-slate-900">
+                    {lang === 'ar' ? 'المسارات التعليمية المتاحة' : 'Formations disponibles'}
+                  </h2>
+                  <p className="text-xs sm:text-sm text-slate-500 mt-1">
+                    {lang === 'ar' ? 'محتوى شامل، مجاني، ومصمم لتزويدك بمهارات حقيقية.' : 'Des cours structurés et complets pour tous.'}
+                  </p>
+                </div>
+
+                {/* Category Filter Pills */}
+                <div className="flex items-center gap-2 overflow-x-auto pb-2 scrollbar-none">
+                  {categories.map((cat) => (
+                    <button
+                      key={cat.id}
+                      onClick={() => setSelectedCategory(cat.id)}
+                      className={`whitespace-nowrap px-4 py-2 rounded-xl text-xs sm:text-sm font-semibold transition-all flex items-center gap-2 ${
+                        selectedCategory === cat.id
+                          ? 'bg-sky-600 text-white shadow-sm'
+                          : 'bg-white border border-slate-200 text-slate-600 hover:border-sky-500 hover:text-slate-900'
+                      }`}
+                    >
+                      <span>{cat.label}</span>
+                      <span className={`text-[11px] px-1.5 py-0.2 rounded-full font-bold ${
+                        selectedCategory === cat.id ? 'bg-sky-700 text-white' : 'bg-slate-100 text-slate-500'
+                      }`}>
+                        {cat.count}
+                      </span>
+                    </button>
+                  ))}
+                </div>
               </div>
 
               {/* Course Grid */}
-              {loading ? (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {[1, 2, 3].map((n) => (
-                    <div key={n} className="bg-white rounded-card border border-neutral-border p-4 animate-pulse h-72">
-                      <div className="bg-slate-200 aspect-video rounded-btn mb-4" />
-                      <div className="h-4 bg-slate-200 rounded-md w-3/4 mb-2" />
-                      <div className="h-3 bg-slate-200 rounded-md w-1/2" />
-                    </div>
-                  ))}
-                </div>
-              ) : courses.length === 0 ? (
-                <div className="text-center py-16 bg-white rounded-card border border-neutral-border p-8">
-                  <BookOpen className="w-12 h-12 text-neutral-muted mx-auto mb-3 opacity-50" />
-                  <p className="text-base font-semibold text-neutral-text">
-                    {lang === 'ar' ? 'لا توجد دورات مطابقة للبحث حالياً.' : 'Aucun cours trouvé.'}
-                  </p>
-                  <p className="text-xs text-neutral-muted mt-1">
-                    {lang === 'ar' ? 'كن أول من ينشئ دورة في هذا المجال عبر استوديو المحتوى.' : 'Créez le premier cours via le Creator Studio.'}
-                  </p>
-                </div>
-              ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {courses.map((course) => {
-                    const isEnrolled = enrolledCourseIds.includes(course.id);
-                    const totalLessons = course.modules?.flatMap(m => m.lessons).length || 2;
-                    const completedForThis = course.modules?.flatMap(m => m.lessons).filter(l => completedLessonIds.includes(l.id)).length || (isEnrolled ? 1 : 0);
-                    const percent = Math.min(100, Math.round((completedForThis / totalLessons) * 100));
+              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                {courses.map((course) => {
+                  const isEnrolled = enrolledCourseIds.includes(course.id);
+                  const totalLessons = course.modules?.flatMap(m => m.lessons).length || 2;
+                  const completedForThis = course.modules?.flatMap(m => m.lessons).filter(l => completedLessonIds.includes(l.id)).length || (isEnrolled ? 1 : 0);
+                  const percent = Math.min(100, Math.round((completedForThis / totalLessons) * 100));
 
-                    return (
-                      <CourseCard
-                        key={course.id}
-                        course={course}
-                        lang={lang}
-                        onSelect={handleSelectCourse}
-                        isEnrolled={isEnrolled}
-                        progressPercent={isEnrolled ? percent : 0}
-                      />
-                    );
-                  })}
+                  return (
+                    <CourseCard
+                      key={course.id}
+                      course={course}
+                      lang={lang}
+                      onSelect={handleSelectCourse}
+                      isEnrolled={isEnrolled}
+                      progressPercent={isEnrolled ? percent : 0}
+                    />
+                  );
+                })}
+              </div>
+            </section>
+
+            {/* WHY DARS SECTION */}
+            <section className="bg-white border-t border-slate-200/80 py-16">
+              <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
+                <h2 className="text-2xl sm:text-3xl font-bold text-slate-900 mb-3">
+                  {lang === 'ar' ? 'لماذا منصة درس؟' : 'Pourquoi choisir Dars ?'}
+                </h2>
+                <p className="text-sm text-slate-500 max-w-xl mx-auto mb-12">
+                  {lang === 'ar'
+                    ? 'صممت المبادرة لتقديم بديل مفتوح ومجاني يحترم وقت المتعلم وقدراته التقنية.'
+                    : 'Une alternative ouverte et gratuite qui valorise l apprentissage réel.'}
+                </p>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-8 text-start">
+                  <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                    <div className="w-12 h-12 rounded-xl bg-sky-100 text-sky-600 flex items-center justify-center font-bold">
+                      <GraduationCap className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-base">
+                      {lang === 'ar' ? 'مهارات حقيقية لسوق الشغل' : 'Compétences concrètes'}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                      {lang === 'ar'
+                        ? 'مناهج برمجية وذكاء اصطناعي حديثة بالدارجة والعربية تمنحك تطبيقات تفاعلية وكود جاهز للبناء.'
+                        : 'Des programmes modernes en IA et développement web adaptés aux exigences du marché.'}
+                    </p>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                    <div className="w-12 h-12 rounded-xl bg-emerald-100 text-emerald-600 flex items-center justify-center font-bold">
+                      <WifiOff className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-base">
+                      {lang === 'ar' ? 'دراسة دون إنترنت (Offline)' : 'Mode hors-ligne PWA'}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                      {lang === 'ar'
+                        ? 'حمّل الدروس ومقاطع الفيديو بنقرة واحدة وتابع دراستك أينما كنت دون استهلاك باقة الإنترنت.'
+                        : 'Téléchargez les leçons d un clic et continuez d étudier même sans connexion internet.'}
+                    </p>
+                  </div>
+
+                  <div className="p-6 rounded-2xl bg-slate-50 border border-slate-200/80 space-y-3">
+                    <div className="w-12 h-12 rounded-xl bg-purple-100 text-purple-600 flex items-center justify-center font-bold">
+                      <Award className="w-6 h-6" />
+                    </div>
+                    <h3 className="font-bold text-slate-900 text-base">
+                      {lang === 'ar' ? 'شهادات إتمام واختبارات' : 'Certificats de réussite'}
+                    </h3>
+                    <p className="text-xs sm:text-sm text-slate-500 leading-relaxed">
+                      {lang === 'ar'
+                        ? 'اختبر تحصيلك بعد كل وحدة دراسية واحصل على شهادة إنجاز رقمية تثبت مهاراتك.'
+                        : 'Évaluez vos acquis après chaque leçon et obtenez une attestation attestant de votre travail.'}
+                    </p>
+                  </div>
                 </div>
-              )}
+              </div>
             </section>
           </div>
         )}
@@ -315,20 +485,20 @@ export const App: React.FC = () => {
       </main>
 
       {/* Footer */}
-      <footer className="bg-white border-t border-neutral-border py-8 text-center text-xs text-neutral-muted mt-16">
+      <footer className="bg-white border-t border-slate-200 py-8 text-center text-xs text-slate-500">
         <div className="max-w-7xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-4">
           <div className="flex items-center gap-2">
-            <span className="font-bold text-neutral-text font-arabic">درس (Dars)</span>
+            <span className="font-bold text-slate-900 font-arabic text-sm">درس (Dars)</span>
             <span>—</span>
-            <span>{lang === 'ar' ? 'مبادرة مجتمعية حرة للتعليم في تونس' : 'Initiative libre pour l éducation en Tunisie'}</span>
+            <span>{lang === 'ar' ? 'مبادرة تعليمية حرة ومفتوحة للمجتمع التونسي' : 'Initiative libre pour l éducation en Tunisie'}</span>
           </div>
 
-          <div className="flex items-center gap-4 text-neutral-muted">
+          <div className="flex items-center gap-4 text-slate-500">
             <span>{lang === 'ar' ? 'محتوى تعليمي حر' : 'Contenu éducatif libre'}</span>
             <span>•</span>
             <span>{lang === 'ar' ? 'متاح دون إنترنت' : 'Accès hors-ligne'}</span>
             <span>•</span>
-            <span className="text-accent-red">❤️ تونس</span>
+            <span className="text-accent-red font-bold">❤️ تونس</span>
           </div>
         </div>
       </footer>
