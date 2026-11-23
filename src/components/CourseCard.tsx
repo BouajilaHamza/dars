@@ -8,13 +8,15 @@ interface CourseCardProps {
   lang: Language;
   onSelect: (course: Course) => void;
   isEnrolled?: boolean;
+  progressPercent?: number;
 }
 
 export const CourseCard: React.FC<CourseCardProps> = ({
   course,
   lang,
   onSelect,
-  isEnrolled = false
+  isEnrolled = false,
+  progressPercent = 0
 }) => {
   const t = translations[lang];
 
@@ -97,6 +99,22 @@ export const CourseCard: React.FC<CourseCardProps> = ({
           <p className="mt-2 text-xs sm:text-sm text-neutral-muted line-clamp-2 leading-relaxed">
             {description}
           </p>
+
+          {/* Enrolled Progress Bar */}
+          {isEnrolled && progressPercent > 0 && (
+            <div className="mt-3 space-y-1">
+              <div className="flex items-center justify-between text-[11px] text-neutral-muted font-medium">
+                <span>{lang === 'ar' ? 'نسبة الإنجاز' : 'Progression'}</span>
+                <span className="text-primary font-bold">{progressPercent}%</span>
+              </div>
+              <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
+                <div 
+                  className="bg-primary h-full transition-all duration-300 rounded-full"
+                  style={{ width: `${progressPercent}%` }}
+                />
+              </div>
+            </div>
+          )}
         </div>
 
         {/* Card Footer: Metadata */}

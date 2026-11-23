@@ -227,15 +227,23 @@ export const App: React.FC = () => {
                 </div>
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                  {courses.map((course) => (
-                    <CourseCard
-                      key={course.id}
-                      course={course}
-                      lang={lang}
-                      onSelect={handleSelectCourse}
-                      isEnrolled={enrolledCourseIds.includes(course.id)}
-                    />
-                  ))}
+                  {courses.map((course) => {
+                    const isEnrolled = enrolledCourseIds.includes(course.id);
+                    const totalLessons = course.modules?.flatMap(m => m.lessons).length || 2;
+                    const completedForThis = course.modules?.flatMap(m => m.lessons).filter(l => completedLessonIds.includes(l.id)).length || (isEnrolled ? 1 : 0);
+                    const percent = Math.min(100, Math.round((completedForThis / totalLessons) * 100));
+
+                    return (
+                      <CourseCard
+                        key={course.id}
+                        course={course}
+                        lang={lang}
+                        onSelect={handleSelectCourse}
+                        isEnrolled={isEnrolled}
+                        progressPercent={isEnrolled ? percent : 0}
+                      />
+                    );
+                  })}
                 </div>
               )}
             </section>
