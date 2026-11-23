@@ -49,6 +49,28 @@ export const App: React.FC = () => {
     document.documentElement.lang = lang;
   }, [lang]);
 
+  // Deep linking via URL hash (#player, #builder, #admin)
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash.replace('#', '');
+      if (hash === 'builder') {
+        setView('builder');
+      } else if (hash === 'admin') {
+        setView('admin');
+      } else if (hash === 'player') {
+        const c = courses[0];
+        if (c && c.modules?.[0]?.lessons?.[0]) {
+          setSelectedCourse(c);
+          setCurrentLesson(c.modules[0].lessons[0]);
+          setView('player');
+        }
+      }
+    };
+    handleHash();
+    window.addEventListener('hashchange', handleHash);
+    return () => window.removeEventListener('hashchange', handleHash);
+  }, [courses]);
+
   // Sync background courses from server
   const fetchCourses = async () => {
     try {
