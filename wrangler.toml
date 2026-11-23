@@ -7,7 +7,7 @@ compatibility_flags = ["nodejs_compat"]
 [[d1_databases]]
 binding = "DB"
 database_name = "dars-db"
-database_id = "local-dars-db"
+database_id = "2a6f2394-7e8e-4a9c-9505-6b51159e8faa"
 
 # Cloudflare R2 Media Storage Binding
 [[r2_buckets]]
