@@ -9,7 +9,8 @@ import {
   GraduationCap,
   LogOut,
   Menu,
-  X
+  X,
+  Shield
 } from 'lucide-react';
 import { Language, translations } from '../lib/i18n';
 import { User } from '../types';
@@ -20,7 +21,7 @@ interface NavbarProps {
   currentUser: User | null;
   onOpenAuth: () => void;
   onLogout: () => void;
-  onNavigate: (view: 'home' | 'dashboard' | 'builder') => void;
+  onNavigate: (view: 'home' | 'dashboard' | 'builder' | 'admin') => void;
   currentView: string;
   onSearchChange: (query: string) => void;
 }
@@ -131,22 +132,36 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          {/* Upload Studio: Restricted to Admins only */}
+          {/* Admin Controls: Studio and Role Management */}
           {currentUser?.role === 'admin' && (
-            <button
-              onClick={() => onNavigate('builder')}
-              className={`px-3 py-1.5 text-sm font-medium rounded-btn flex items-center gap-1.5 transition-colors ${
-                currentView === 'builder'
-                  ? 'bg-primary-surface text-primary font-semibold'
-                  : 'text-neutral-text hover:text-primary hover:bg-neutral-bg'
-              }`}
-            >
-              <PlusCircle className="w-4 h-4 text-accent-red" />
-              <span>{t.uploadStudio}</span>
-              <span className="text-[10px] bg-accent-red text-white px-1.5 py-0.2 rounded-full font-bold">
-                Admin
-              </span>
-            </button>
+            <>
+              <button
+                onClick={() => onNavigate('builder')}
+                className={`px-3 py-1.5 text-sm font-medium rounded-btn flex items-center gap-1.5 transition-colors ${
+                  currentView === 'builder'
+                    ? 'bg-primary-surface text-primary font-semibold'
+                    : 'text-neutral-text hover:text-primary hover:bg-neutral-bg'
+                }`}
+              >
+                <PlusCircle className="w-4 h-4 text-accent-red" />
+                <span>{t.uploadStudio}</span>
+              </button>
+
+              <button
+                onClick={() => onNavigate('admin')}
+                className={`px-3 py-1.5 text-sm font-medium rounded-btn flex items-center gap-1.5 transition-colors ${
+                  currentView === 'admin'
+                    ? 'bg-primary-surface text-primary font-semibold'
+                    : 'text-neutral-text hover:text-primary hover:bg-neutral-bg'
+                }`}
+              >
+                <Shield className="w-4 h-4 text-primary" />
+                <span>{lang === 'ar' ? 'إدارة المشرفين' : 'Gestion Admins'}</span>
+                <span className="text-[10px] bg-accent-red text-white px-1.5 py-0.2 rounded-full font-bold">
+                  Admin
+                </span>
+              </button>
+            </>
           )}
 
           {/* Language Switcher */}
@@ -240,16 +255,22 @@ export const Navbar: React.FC<NavbarProps> = ({
               </button>
             )}
             {currentUser?.role === 'admin' && (
-              <button
-                onClick={() => { onNavigate('builder'); setMobileMenuOpen(false); }}
-                className="text-start py-2 text-sm font-medium text-neutral-text hover:text-primary flex items-center gap-2"
-              >
-                <PlusCircle className="w-4 h-4 text-accent-red" />
-                <span>{t.uploadStudio}</span>
-                <span className="text-[10px] bg-accent-red text-white px-1.5 py-0.2 rounded-full font-bold">
-                  Admin
-                </span>
-              </button>
+              <>
+                <button
+                  onClick={() => { onNavigate('builder'); setMobileMenuOpen(false); }}
+                  className="text-start py-2 text-sm font-medium text-neutral-text hover:text-primary flex items-center gap-2"
+                >
+                  <PlusCircle className="w-4 h-4 text-accent-red" />
+                  <span>{t.uploadStudio}</span>
+                </button>
+                <button
+                  onClick={() => { onNavigate('admin'); setMobileMenuOpen(false); }}
+                  className="text-start py-2 text-sm font-medium text-neutral-text hover:text-primary flex items-center gap-2"
+                >
+                  <Shield className="w-4 h-4 text-primary" />
+                  <span>{lang === 'ar' ? 'إدارة المشرفين' : 'Gestion Admins'}</span>
+                </button>
+              </>
             )}
           </div>
 

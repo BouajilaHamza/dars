@@ -5,6 +5,7 @@ import { CourseDetail } from './components/CourseDetail';
 import { LessonPlayer } from './components/LessonPlayer';
 import { CourseBuilder } from './components/CourseBuilder';
 import { Dashboard } from './components/Dashboard';
+import { AdminPanel } from './components/AdminPanel';
 import { AuthModal } from './components/AuthModal';
 import { Course, Lesson, User } from './types';
 import { Language, translations } from './lib/i18n';
@@ -12,7 +13,7 @@ import { Sparkles, Globe, Heart, ShieldCheck, Zap, BookOpen } from 'lucide-react
 
 export const App: React.FC = () => {
   const [lang, setLang] = useState<Language>('ar');
-  const [view, setView] = useState<'home' | 'detail' | 'player' | 'builder' | 'dashboard'>('home');
+  const [view, setView] = useState<'home' | 'detail' | 'player' | 'builder' | 'dashboard' | 'admin'>('home');
   const [selectedCourse, setSelectedCourse] = useState<Course | null>(null);
   const [currentLesson, setCurrentLesson] = useState<Lesson | null>(null);
   const [currentUser, setCurrentUser] = useState<User | null>(null);
@@ -300,6 +301,15 @@ export const App: React.FC = () => {
             completedLessonIds={completedLessonIds}
             lang={lang}
             onSelectCourse={handleSelectCourse}
+          />
+        )}
+
+        {/* VIEW 6: ADMIN USER & ROLE MANAGEMENT */}
+        {view === 'admin' && (
+          <AdminPanel
+            currentUser={currentUser}
+            lang={lang}
+            onBack={() => setView('home')}
           />
         )}
       </main>

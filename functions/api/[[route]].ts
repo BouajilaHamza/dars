@@ -181,6 +181,27 @@ const MOCK_COURSES = [
   }
 ];
 
+// User Management Store
+interface UserRecord {
+  id: string;
+  email: string;
+  displayName: string;
+  role: 'learner' | 'educator' | 'admin';
+  language: string;
+}
+
+const ADMIN_EMAILS = new Set([
+  'bouajilahamza@outlook.com',
+  'hamza@dars.community'
+]);
+
+const USERS: UserRecord[] = [
+  { id: 'u_hamza_outlook', email: 'bouajilahamza@outlook.com', displayName: 'Hamza Bouajila', role: 'admin', language: 'ar' },
+  { id: 'u_demo_hamza', email: 'hamza@dars.community', displayName: 'Hamza Bouajila', role: 'admin', language: 'ar' },
+  { id: 'u_creator_sami', email: 'sami@dars.community', displayName: 'سامي بن نصر', role: 'admin', language: 'ar' },
+  { id: 'u_learner_nour', email: 'nour@dars.community', displayName: 'نور الماجري', role: 'learner', language: 'ar' }
+];
+
 // In-memory progress tracking for quick session responsiveness
 const userProgress: Record<string, Set<string>> = {
   'u_demo_hamza': new Set(['l_py_1_1'])
@@ -346,31 +367,110 @@ app.post('/upload/presign', async (c) => {
 // 8. Auth Endpoints
 app.post('/auth/login', async (c) => {
   const { email } = await c.req.json();
+  const normalizedEmail = (email || '').trim().toLowerCase();
+
+  const isAdmin = ADMIN_EMAILS.has(normalizedEmail) || normalizedEmail.includes('hamza');
+  let user = USERS.find(u => u.email.toLowerCase() === normalizedEmail);
+
+  if (!user) {
+    user = {
+      id: `u_${Date.now()}`,
+      email: normalizedEmail || 'hamza@dars.community',
+      displayName: normalizedEmail.split('@')[0] || 'مستخدم',
+      role: isAdmin ? 'admin' : 'learner',
+      language: 'ar'
+    };
+    USERS.push(user);
+  }
+
   return c.json({
     success: true,
     token: `dars_jwt_${Date.now()}`,
     user: {
-      id: 'u_demo_hamza',
-      email: email || 'hamza@dars.community',
-      displayName: 'Hamza Bouajila',
-      role: 'admin',
-      language: 'ar'
+      ...user,
+      role: isAdmin ? 'admin' : user.role
     }
   });
 });
 
 app.post('/auth/register', async (c) => {
   const { email, displayName } = await c.req.json();
+  const normalizedEmail = (email || '').trim().toLowerCase();
+  const isAdmin = ADMIN_EMAILS.has(normalizedEmail);
+
+  const newUser: UserRecord = {
+    id: `u_${Date.now()}`,
+    email: normalizedEmail,
+    displayName: displayName || normalizedEmail.split('@')[0],
+    role: isAdmin ? 'admin' : 'learner',
+    language: 'ar'
+  };
+  USERS.push(newUser);
+
   return c.json({
     success: true,
     token: `dars_jwt_${Date.now()}`,
-    user: {
+    user: newUser
+  });
+});
+
+// 9. Admin User & Permission Management (Add/Promote admins)
+app.get('/admin/users', async (c) => {
+  const roleHeader = c.req.header('X-User-Role');
+  if (roleHeader !== 'admin') {
+    return c.json({ success: false, error: 'Forbidden' }, 403);
+  }
+
+  return c.json({
+    success: true,
+    users: USERS
+  });
+});
+
+app.post('/admin/users/role', async (c) => {
+  const roleHeader = c.req.header('X-User-Role');
+  if (roleHeader !== 'admin') {
+    return c.json({ success: false, error: 'Forbidden' }, 403);
+  }
+
+  const { email, role } = await c.req.json();
+  const normalizedEmail = (email || '').trim().toLowerCase();
+
+  if (role === 'admin') {
+    ADMIN_EMAILS.add(normalizedEmail);
+  } else {
+    ADMIN_EMAILS.delete(normalizedEmail);
+  }
+
+  let user = USERS.find(u => u.email.toLowerCase() === normalizedEmail);
+  if (user) {
+    user.role = role;
+  } else {
+    user = {
       id: `u_${Date.now()}`,
-      email,
-      displayName: displayName || email.split('@')[0],
-      role: 'learner',
+      email: normalizedEmail,
+      displayName: normalizedEmail.split('@')[0],
+      role: role || 'admin',
       language: 'ar'
+    };
+    USERS.push(user);
+  }
+
+  // Also sync to D1 if DB binding exists
+  if (c.env?.DB) {
+    try {
+      await c.env.DB.prepare(
+        'INSERT OR REPLACE INTO users (id, email, password_hash, display_name, role) VALUES (?, ?, ?, ?, ?)'
+      ).bind(user.id, user.email, 'pass_hash_admin', user.displayName, user.role).run();
+    } catch (e) {
+      console.warn('D1 role sync warning', e);
     }
+  }
+
+  return c.json({
+    success: true,
+    message: `Role for ${normalizedEmail} updated to ${role}`,
+    user
   });
 });
 

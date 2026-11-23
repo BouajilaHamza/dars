@@ -185,22 +185,22 @@ export const AuthModal: React.FC<AuthModalProps> = ({
         </form>
 
         {/* Demo Fast Login */}
-        <div className="mt-4 pt-4 border-t border-neutral-border text-center">
+        <div className="mt-4 pt-4 border-t border-neutral-border flex flex-col gap-2 text-center">
           <button
             type="button"
             onClick={() => {
               onSuccess({
-                id: 'u_demo_hamza',
-                email: 'hamza@dars.community',
+                id: 'u_hamza_outlook',
+                email: 'bouajilahamza@outlook.com',
                 displayName: 'Hamza Bouajila',
                 role: 'admin',
                 language: lang
               });
               onClose();
             }}
-            className="text-xs text-primary font-medium hover:underline"
+            className="text-xs text-primary font-bold hover:underline"
           >
-            {lang === 'ar' ? 'الدخول كحساب تجريبي فوري (Demo Login)' : 'Connexion rapide invité (Compte démo)'}
+            {lang === 'ar' ? 'الدخول السريع كمسؤول عام (Super-Admin Hamza)' : 'Connexion rapide Super-Admin (Hamza)'}
           </button>
         </div>
       </div>
