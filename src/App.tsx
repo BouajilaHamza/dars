@@ -314,9 +314,9 @@ export const App: React.FC = () => {
           </div>
 
           <div className="flex items-center gap-4 text-neutral-muted">
-            <span>Cloudflare Serverless ($0 Cost)</span>
+            <span>{lang === 'ar' ? 'محتوى تعليمي حر' : 'Contenu éducatif libre'}</span>
             <span>•</span>
-            <span>PWA & Offline First</span>
+            <span>{lang === 'ar' ? 'متاح دون إنترنت' : 'Accès hors-ligne'}</span>
             <span>•</span>
             <span className="text-accent-red">❤️ تونس</span>
           </div>

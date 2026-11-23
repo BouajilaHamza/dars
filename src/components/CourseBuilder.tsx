@@ -274,7 +274,7 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = ({
           {uploadProgress !== null && (
             <div className="space-y-1">
               <div className="flex justify-between text-xs text-neutral-muted font-medium">
-                <span>{lang === 'ar' ? 'رفع وحفظ في Cloudflare R2...' : 'Téléversement vers Cloudflare R2...'}</span>
+                <span>{lang === 'ar' ? 'جاري رفع وحفظ ملف الفيديو...' : 'Téléversement du fichier vidéo...'}</span>
                 <span>{uploadProgress}%</span>
               </div>
               <div className="w-full bg-slate-100 h-2 rounded-full overflow-hidden">

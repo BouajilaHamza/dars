@@ -4,7 +4,7 @@ export const translations = {
   ar: {
     appName: 'دَرْسْ',
     tagline: 'منصة التعليم المجاني للمجتمع التونسي',
-    subtagline: 'دروس برمجية، ذكاء اصطناعي، ومناهج تعليمية حرة 100% بدون أي تكاليف استضافة على شبكة Cloudflare.',
+    subtagline: 'دروس تطبيقية في البرمجة والذكاء الاصطناعي ومناهج تعليمية مجانية 100% لمساعدة الشباب التونسي على اكتساب مهارات المستقبل.',
     searchPlaceholder: 'ابحث عن دورة، تقنية أو مهارة...',
     exploreCourses: 'استكشف الدورات',
     myLearning: 'فضاء التعلم الخاص بي',
@@ -51,15 +51,15 @@ export const translations = {
     aiGeneratedLabel: 'محتوى معزز بالذكاء الاصطناعي',
     communityCreated: 'مبادرة مجتمعية حرة',
     heroStats: {
-      zeroCost: '0 مليم تكلفة',
-      openCommunity: '100% مفتوح المصدر',
-      edgeHosted: 'استضافة سريعة على Cloudflare'
+      zeroCost: 'مجاني 100%',
+      openCommunity: 'مبادرة مجتمعية حرة',
+      edgeHosted: 'سريع وخفيف على الهاتف'
     }
   },
   fr: {
     appName: 'Dars',
     tagline: 'Plateforme MOOC Communautaire pour la Tunisie',
-    subtagline: 'Cours pratiques en IA, développement web et compétences professionnelles. 100% gratuit et hébergé à 0$ de coût sur Cloudflare.',
+    subtagline: 'Cours pratiques en IA, développement web et compétences professionnelles. 100% gratuit et accessible pour tous les apprenants tunisiens.',
     searchPlaceholder: 'Rechercher un cours, une techno...',
     exploreCourses: 'Explorer les cours',
     myLearning: 'Mon Apprentissage',
@@ -106,15 +106,15 @@ export const translations = {
     aiGeneratedLabel: 'Contenu assisté par IA',
     communityCreated: 'Initiative communautaire',
     heroStats: {
-      zeroCost: '0 TND de coût',
-      openCommunity: '100% Open Source',
-      edgeHosted: 'Cloudflare Serverless Edge'
+      zeroCost: '100% Gratuit',
+      openCommunity: 'Initiative communautaire libre',
+      edgeHosted: 'Rapide et optimisé mobile'
     }
   },
   en: {
     appName: 'Dars',
     tagline: 'Community Open MOOC for Tunisia',
-    subtagline: 'Practical AI, web development, and educational tracks for Tunisians. 100% free and hosted at $0 cost on Cloudflare.',
+    subtagline: 'Practical AI, software development, and skills tracks. 100% free and accessible for all Tunisian learners.',
     searchPlaceholder: 'Search courses, topics, skills...',
     exploreCourses: 'Explore Courses',
     myLearning: 'My Learning',
@@ -161,9 +161,9 @@ export const translations = {
     aiGeneratedLabel: 'AI-Enhanced Content',
     communityCreated: 'Community Initiative',
     heroStats: {
-      zeroCost: '$0 Cost',
-      openCommunity: '100% Open Source',
-      edgeHosted: 'Fast Cloudflare Edge'
+      zeroCost: '100% Free',
+      openCommunity: 'Open Community Initiative',
+      edgeHosted: 'Fast & Mobile Optimized'
     }
   }
 };
