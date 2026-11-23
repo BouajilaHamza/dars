@@ -1,0 +1,13 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 200 200" fill="none">
+  <!-- Mediterranean Sea Blue rounded backdrop -->
+  <rect width="200" height="200" rx="44" fill="#0284c7"/>
+  
+  <!-- Subtle warm ocean wave accent -->
+  <path d="M0 140C40 130 60 160 100 150C140 140 160 170 200 160V200H0V140Z" fill="#0369a1" opacity="0.4"/>
+  
+  <!-- Open Book & Knowledge icon -->
+  <path d="M100 68V132M100 68C85 58 65 58 48 64V128C65 122 85 122 100 132M100 68C115 58 135 58 152 64V128C135 122 115 122 100 132" stroke="#ffffff" stroke-width="9" stroke-linecap="round" stroke-linejoin="round"/>
+  
+  <!-- Minimal Tunisian Red Dot (from flag/identity) -->
+  <circle cx="100" cy="50" r="7" fill="#dc2626"/>
+</svg>

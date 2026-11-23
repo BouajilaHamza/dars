@@ -1,0 +1,21 @@
+{
+  "name": "درس — Dars MOOC",
+  "short_name": "Dars",
+  "description": "منصة التعليم المفتوح للمجتمع التونسي بدون أي تكاليف",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#f8fafc",
+  "theme_color": "#0284c7",
+  "orientation": "any",
+  "categories": ["education"],
+  "lang": "ar",
+  "dir": "rtl",
+  "icons": [
+    {
+      "src": "/logo.svg",
+      "sizes": "192x192 512x512",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

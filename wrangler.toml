@@ -1,0 +1,15 @@
+name = "dars"
+pages_build_output_dir = "dist"
+compatibility_date = "2024-09-01"
+compatibility_flags = ["nodejs_compat"]
+
+# Cloudflare D1 Serverless SQL Database Binding
+[[d1_databases]]
+binding = "DB"
+database_name = "dars-db"
+database_id = "local-dars-db"
+
+# Cloudflare R2 Media Storage Binding
+[[r2_buckets]]
+binding = "BUCKET"
+bucket_name = "dars-media"
