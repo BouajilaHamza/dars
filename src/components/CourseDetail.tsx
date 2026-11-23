@@ -189,22 +189,19 @@ export const CourseDetail: React.FC<CourseDetailProps> = ({
               </span>
             </div>
 
-            {isEnrolled ? (
-              <button
-                onClick={() => firstLesson && onStartLesson(firstLesson)}
-                className="w-full py-3 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-btn shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2"
-              >
-                <PlayCircle className="w-5 h-5" />
-                <span>{lang === 'ar' ? 'مواصلة الدرس' : 'Continuer le cours'}</span>
-              </button>
-            ) : (
-              <button
-                onClick={() => onEnroll(course.id)}
-                className="w-full py-3 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-btn shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2"
-              >
-                <BookOpen className="w-5 h-5" />
-                <span>{t.startCourse}</span>
-              </button>
+            {/* Direct Open Learning CTA */}
+            <button
+              onClick={() => firstLesson && onStartLesson(firstLesson)}
+              className="w-full py-3 bg-primary hover:bg-primary-hover text-white font-semibold text-sm rounded-btn shadow-md shadow-primary/20 transition-all flex items-center justify-center gap-2"
+            >
+              <PlayCircle className="w-5 h-5" />
+              <span>{isEnrolled ? (lang === 'ar' ? 'مواصلة الدرس' : 'Continuer le cours') : t.startCourse}</span>
+            </button>
+
+            {!isEnrolled && (
+              <p className="text-[11px] text-center text-neutral-muted mt-2">
+                {t.publicAccessNotice}
+              </p>
             )}
 
             <div className="mt-4 pt-4 border-t border-neutral-border text-xs text-neutral-muted space-y-2">

@@ -221,9 +221,17 @@ app.get('/courses/:id', async (c) => {
   return c.json({ success: true, course });
 });
 
-// 3. Create New Course (Upload Studio)
+// 3. Create New Course (Upload Studio - Restricted to Admin)
 app.post('/courses', async (c) => {
+  const authHeader = c.req.header('Authorization');
+  const roleHeader = c.req.header('X-User-Role');
   const body = await c.req.json();
+
+  const userRole = roleHeader || body.user_role;
+  if (userRole !== 'admin') {
+    return c.json({ success: false, error: 'Forbidden: Only admin users can create courses and upload content' }, 403);
+  }
+
   const newCourse = {
     id: `c_${Date.now()}`,
     creator_id: body.creator_id || 'u_creator_community',
@@ -313,9 +321,17 @@ app.get('/my/learning', async (c) => {
   });
 });
 
-// 7. Presigned R2 Upload Mock endpoint
+// 7. Presigned R2 Upload Mock endpoint (Restricted to Admin)
 app.post('/upload/presign', async (c) => {
-  const { fileName, fileType } = await c.req.json();
+  const roleHeader = c.req.header('X-User-Role');
+  const body = await c.req.json();
+  const userRole = roleHeader || body.user_role;
+
+  if (userRole !== 'admin') {
+    return c.json({ success: false, error: 'Forbidden: Only admin users can upload videos to R2' }, 403);
+  }
+
+  const { fileName, fileType } = body;
   const fileKey = `uploads/${Date.now()}-${fileName}`;
   
   // Return presigned direct upload URL structure

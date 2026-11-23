@@ -11,7 +11,7 @@ import {
   Video,
   List
 } from 'lucide-react';
-import { Course, Lesson, QuizQuestion } from '../types';
+import { Course, Lesson, QuizQuestion, User } from '../types';
 import { Language, translations } from '../lib/i18n';
 import { saveLessonOffline, isLessonOffline, removeLessonOffline } from '../lib/offline-db';
 
@@ -23,6 +23,8 @@ interface LessonPlayerProps {
   onSelectLesson: (lesson: Lesson) => void;
   onCompleteLesson: (lessonId: string) => void;
   isCompleted: boolean;
+  currentUser: User | null;
+  onRequireAuth: () => void;
 }
 
 export const LessonPlayer: React.FC<LessonPlayerProps> = ({
@@ -32,7 +34,9 @@ export const LessonPlayer: React.FC<LessonPlayerProps> = ({
   onBackToCourse,
   onSelectLesson,
   onCompleteLesson,
-  isCompleted
+  isCompleted,
+  currentUser,
+  onRequireAuth
 }) => {
   const [activeTab, setActiveTab] = useState<'content' | 'quiz'>('content');
   const [offlineSaved, setOfflineSaved] = useState(false);
@@ -165,17 +169,30 @@ export const LessonPlayer: React.FC<LessonPlayerProps> = ({
               </div>
 
               {/* Mark Complete CTA */}
-              <button
-                onClick={() => onCompleteLesson(currentLesson.id)}
-                className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-btn transition-colors flex items-center gap-1.5 ${
-                  isCompleted
-                    ? 'bg-state-success text-white'
-                    : 'bg-primary hover:bg-primary-hover text-white'
-                }`}
-              >
-                <CheckCircle className="w-4 h-4" />
-                <span>{isCompleted ? t.completed : t.markCompleted}</span>
-              </button>
+              <div className="flex flex-col items-end gap-1">
+                <button
+                  onClick={() => {
+                    if (!currentUser) {
+                      onRequireAuth();
+                    } else {
+                      onCompleteLesson(currentLesson.id);
+                    }
+                  }}
+                  className={`px-4 py-2 text-xs sm:text-sm font-semibold rounded-btn transition-colors flex items-center gap-1.5 ${
+                    isCompleted
+                      ? 'bg-state-success text-white'
+                      : 'bg-primary hover:bg-primary-hover text-white'
+                  }`}
+                >
+                  <CheckCircle className="w-4 h-4" />
+                  <span>{isCompleted ? t.completed : t.markCompleted}</span>
+                </button>
+                {!currentUser && (
+                  <span className="text-[10px] text-neutral-muted">
+                    {t.loginToSaveProgress}
+                  </span>
+                )}
+              </div>
             </div>
 
             {/* Tabs for Notes / Quiz */}

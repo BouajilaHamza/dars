@@ -265,6 +265,8 @@ export const App: React.FC = () => {
             onSelectLesson={setCurrentLesson}
             onCompleteLesson={handleCompleteLesson}
             isCompleted={completedLessonIds.includes(currentLesson.id)}
+            currentUser={currentUser}
+            onRequireAuth={() => setAuthModalOpen(true)}
           />
         )}
 
@@ -272,6 +274,8 @@ export const App: React.FC = () => {
         {view === 'builder' && (
           <CourseBuilder
             lang={lang}
+            currentUser={currentUser}
+            onRequireAuth={() => setAuthModalOpen(true)}
             onCourseCreated={(newCourse) => {
               setCourses([newCourse, ...courses]);
               handleSelectCourse(newCourse);

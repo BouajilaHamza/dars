@@ -1,18 +1,22 @@
 import React, { useState } from 'react';
-import { Upload, Sparkles, Plus, CheckCircle, Video, FileText, ArrowLeft, ArrowRight } from 'lucide-react';
+import { Upload, Sparkles, Plus, CheckCircle, Video, FileText, ArrowLeft, ArrowRight, ShieldAlert } from 'lucide-react';
 import { Language, translations } from '../lib/i18n';
-import { Course } from '../types';
+import { Course, User } from '../types';
 
 interface CourseBuilderProps {
   lang: Language;
   onCourseCreated: (newCourse: Course) => void;
   onCancel: () => void;
+  currentUser: User | null;
+  onRequireAuth: () => void;
 }
 
 export const CourseBuilder: React.FC<CourseBuilderProps> = ({
   lang,
   onCourseCreated,
-  onCancel
+  onCancel,
+  currentUser,
+  onRequireAuth
 }) => {
   const [titleAr, setTitleAr] = useState('');
   const [titleFr, setTitleFr] = useState('');
@@ -26,6 +30,40 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = ({
 
   const t = translations[lang];
 
+  // If user is not admin, show guard view
+  if (currentUser?.role !== 'admin') {
+    return (
+      <div className="max-w-2xl mx-auto px-4 py-16 text-center animate-fadeIn">
+        <div className="bg-white rounded-card border border-neutral-border p-8 shadow-xs">
+          <div className="w-16 h-16 rounded-2xl bg-accent-red-subtle text-accent-red flex items-center justify-center mx-auto mb-4">
+            <ShieldAlert className="w-8 h-8" />
+          </div>
+          <h2 className="text-xl font-bold text-neutral-text font-arabic mb-2">
+            {t.adminOnly}
+          </h2>
+          <p className="text-sm text-neutral-muted mb-6">
+            {t.adminUploadNotice}
+          </p>
+          {!currentUser ? (
+            <button
+              onClick={onRequireAuth}
+              className="px-6 py-2.5 bg-primary hover:bg-primary-hover text-white text-sm font-semibold rounded-btn transition-colors"
+            >
+              {t.login}
+            </button>
+          ) : (
+            <button
+              onClick={onCancel}
+              className="px-6 py-2.5 bg-neutral-bg hover:bg-slate-200 text-neutral-text text-sm font-semibold rounded-btn transition-colors"
+            >
+              {lang === 'ar' ? 'العودة للدورات' : 'Retour aux cours'}
+            </button>
+          )}
+        </div>
+      </div>
+    );
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
@@ -35,7 +73,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = ({
       setUploadProgress(40);
       const presignRes = await fetch('/api/upload/presign', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-User-Role': currentUser?.role || 'admin'
+        },
         body: JSON.stringify({ fileName: 'course_preview.mp4', fileType: 'video/mp4' })
       });
       await presignRes.json();
@@ -44,7 +85,10 @@ export const CourseBuilder: React.FC<CourseBuilderProps> = ({
       // 2. Submit course creation
       const res = await fetch('/api/courses', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'X-User-Role': currentUser?.role || 'admin'
+        },
         body: JSON.stringify({
           title_ar: titleAr,
           title_fr: titleFr,

@@ -131,17 +131,23 @@ export const Navbar: React.FC<NavbarProps> = ({
             </button>
           )}
 
-          <button
-            onClick={() => onNavigate('builder')}
-            className={`px-3 py-1.5 text-sm font-medium rounded-btn flex items-center gap-1.5 transition-colors ${
-              currentView === 'builder'
-                ? 'bg-primary-surface text-primary font-semibold'
-                : 'text-neutral-text hover:text-primary hover:bg-neutral-bg'
-            }`}
-          >
-            <PlusCircle className="w-4 h-4" />
-            <span>{t.uploadStudio}</span>
-          </button>
+          {/* Upload Studio: Restricted to Admins only */}
+          {currentUser?.role === 'admin' && (
+            <button
+              onClick={() => onNavigate('builder')}
+              className={`px-3 py-1.5 text-sm font-medium rounded-btn flex items-center gap-1.5 transition-colors ${
+                currentView === 'builder'
+                  ? 'bg-primary-surface text-primary font-semibold'
+                  : 'text-neutral-text hover:text-primary hover:bg-neutral-bg'
+              }`}
+            >
+              <PlusCircle className="w-4 h-4 text-accent-red" />
+              <span>{t.uploadStudio}</span>
+              <span className="text-[10px] bg-accent-red text-white px-1.5 py-0.2 rounded-full font-bold">
+                Admin
+              </span>
+            </button>
+          )}
 
           {/* Language Switcher */}
           <div className="relative flex items-center bg-neutral-bg rounded-btn p-1 border border-neutral-border text-xs">
@@ -233,12 +239,18 @@ export const Navbar: React.FC<NavbarProps> = ({
                 {t.myLearning}
               </button>
             )}
-            <button
-              onClick={() => { onNavigate('builder'); setMobileMenuOpen(false); }}
-              className="text-start py-2 text-sm font-medium text-neutral-text hover:text-primary"
-            >
-              {t.uploadStudio}
-            </button>
+            {currentUser?.role === 'admin' && (
+              <button
+                onClick={() => { onNavigate('builder'); setMobileMenuOpen(false); }}
+                className="text-start py-2 text-sm font-medium text-neutral-text hover:text-primary flex items-center gap-2"
+              >
+                <PlusCircle className="w-4 h-4 text-accent-red" />
+                <span>{t.uploadStudio}</span>
+                <span className="text-[10px] bg-accent-red text-white px-1.5 py-0.2 rounded-full font-bold">
+                  Admin
+                </span>
+              </button>
+            )}
           </div>
 
           <div className="pt-2 border-t border-neutral-border flex justify-between items-center">
